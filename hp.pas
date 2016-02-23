@@ -5,6 +5,12 @@ interface
 uses System.SysUtils, System.Generics.Collections;
 
 const hpBooks = '12345';
+      cNumberOfBooks = 5;
+      CDiscounts : array[1..cNumberOfBooks] of extended = (1.00,
+                                                           0.95,
+                                                           0.90,
+                                                           0.80,
+                                                           0.75);
 
 type
 
@@ -96,14 +102,11 @@ begin
 end;
 
 function Thp.DiscountPercentage(inStr : string):extended;
+var numDiffBooks : integer;
 begin
   result := 1;
-  case NumberOfDifferentBooks(inStr) of
-    2 : result := 0.95;
-    3 : result := 0.9;
-    4 : result := 0.8;
-    5 : result := 0.75;
-  end; //case
+  numDiffBooks := NumberOfDifferentBooks(inStr);
+  result := CDiscounts[numDiffBooks];
 end;
 
 function Thp.NumberOfDifferentBooks(inStr : string):integer;
