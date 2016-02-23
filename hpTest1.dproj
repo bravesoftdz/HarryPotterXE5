@@ -4,7 +4,7 @@
         <ProjectVersion>15.3</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>5</TargetedPlatforms>
         <AppType>Console</AppType>
@@ -66,7 +66,7 @@
         <Manifest_File>None</Manifest_File>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <DCC_UnitSearchPath>$(BDS)\Source\DUnit\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <DCC_Define>CONSOLE_TESTRUNNER;$(DCC_Define)</DCC_Define>
+        <DCC_Define>_CONSOLE_TESTRUNNER;$(DCC_Define)</DCC_Define>
         <DCC_DcuOutput>.</DCC_DcuOutput>
         <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_E>false</DCC_E>

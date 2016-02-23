@@ -12,26 +12,34 @@ type
     private
     public
     SingleBookPrice : extended;
-    subBasket,
     Basket : string;
-    Group  : TList<String>;
+    Group  : TArray<String>;
     function BasketTotal:extended;
-    function DiscountPercentage:extended;
-    function NumberOfDifferentBooks:integer;
-    function GroupBasket:TList<String>;
+    function DiscountPercentage(inStr : string):extended;
+    function NumberOfDifferentBooks(inStr : string):integer;
+    function GroupBasket:TArray<String>;
     constructor Create;
   end;
 
 implementation
 
+function Head(inStr : string):string;
+begin
+  result := inStr.Remove(1);
+end;
+
+function Tail(inStr : string):string;
+begin
+  result := inStr.Remove(0,1);
+end;
+
 constructor Thp.Create;
 begin
   SingleBookPrice := 8;
   Basket := '';
-  subBasket := '';
 end;
 
-function Thp.GroupBasket:TList<String>;
+function Thp.GroupBasket:TArray<String>;
 var lStrArray : TArray<String>;
     wrkBasket : string;
     tmpStr    : string;
@@ -42,8 +50,7 @@ begin
   wrkBasket := Basket;
   StrCount := 1;
   SetLength(lStrArray,StrCount);
-  result := TList<String>.Create;
-  thisBook := wrkBasket.Remove(1){removes "tail" of wrkBasket};
+  thisBook := Head(wrkBasket);
   while wrkBasket.Length > 0 do
   begin
     Index := 0;
@@ -55,8 +62,8 @@ begin
         begin
           tmpStr := tmpStr + thisBook;
           lStrArray[Index] := tmpStr;
-          wrkBasket := wrkBasket.Remove(0,1){removes "head" of wrkBasket};
-          thisBook := wrkBasket.Remove(1){removes "tail" of wrkBasket};
+          wrkBasket := Tail(wrkBasket);
+          thisBook := Head(wrkBasket);
         end
         else
         if (Index = StrCount - 1) then
@@ -68,14 +75,13 @@ begin
       end;
     until (Index = StrCount) or wrkBasket.IsEmpty;
   end;
-  for tmpStr in lStrArray do
-    result.Add(tmpStr);
+  result := lStrArray;
 end;
 
 function Thp.BasketTotal:extended;
 var hpBook : char;
     totalBooks : integer;
-    subBaskets : TList<String>;
+    subBaskets : TArray<String>;
     wrkSubBasket : string;
     subTotal : extended;
 begin
@@ -83,19 +89,16 @@ begin
   result := 0;
   for wrkSubBasket in subBaskets do
   begin
-    subBasket := wrkSubBasket;
-    totalBooks := 0;
-    for hpBook in hpBooks do
-      totalBooks := totalBooks + subBasket.CountChar(hpBook);
-    subTotal := totalBooks * (SingleBookPrice * DiscountPercentage);
+    totalBooks := wrkSubBasket.Length;
+    subTotal := totalBooks * (SingleBookPrice * DiscountPercentage(wrkSubBasket));
     result := result + subTotal;
   end;
 end;
 
-function Thp.DiscountPercentage:extended;
+function Thp.DiscountPercentage(inStr : string):extended;
 begin
   result := 1;
-  case NumberOfDifferentBooks of
+  case NumberOfDifferentBooks(inStr) of
     2 : result := 0.95;
     3 : result := 0.9;
     4 : result := 0.8;
@@ -103,12 +106,12 @@ begin
   end; //case
 end;
 
-function Thp.NumberOfDifferentBooks:integer;
+function Thp.NumberOfDifferentBooks(inStr : string):integer;
 var hpBook : char;
 begin
   result := 0;
   for hpBook in hpBooks do
-    if subBasket.Contains(hpBook) then
+    if inStr.Contains(hpBook) then
       inc(result);
 end;
 
